@@ -1,7 +1,7 @@
 'use client'
 
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { getBalanceSummary } from "@/features/action";
+import { getBalanceSummary } from "@/features/transaction/action";
 import { convertToIDR } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { TrendingDownIcon, TrendingUpIcon, WalletIcon } from "lucide-react";
