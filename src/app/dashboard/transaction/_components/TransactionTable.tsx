@@ -4,7 +4,11 @@ import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, Tabl
 import { getTransactions } from "@/features/transaction/action";
 import { cn, convertToIDR } from "@/lib/utils";
 import { PencilIcon, Trash2Icon } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Fragment } from "react/jsx-runtime";
+import { Pagination, PaginationContent, PaginationItem, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
+import { Input } from "@/components/ui/input";
+import { useEffect, useState } from "react";
 
 const TABLE_HEADER = ["#", "Date", "Description", "Category", "Amount", "Action"]
 
@@ -29,6 +33,20 @@ export default function TransactionTable({
     isLoading: boolean;
     refetch: () => void;
 }) {
+
+    const  [localSearch, setLocalSearch] = useState(search)
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            if(localSearch !== search){
+                setSearch(localSearch)
+                setPage(1)
+            }
+        }, 500)
+
+        return () => clearTimeout(timer)
+    })
+    
     return (
         <Fragment>
             <Card className="gap-2 w-full">
@@ -36,6 +54,9 @@ export default function TransactionTable({
                     <div>
                         <CardTitle>Recent Transaction</CardTitle>
                         <CardDescription>Your latest financial activities</CardDescription>
+                    </div>
+                    <div>
+                        <Input placeholder="Search desuwa!  (・o･)♪" value={localSearch} onChange={(e) => setLocalSearch(e.target.value)} className="w-full"/>
                     </div>
                 </CardHeader>
                 <CardContent>
@@ -80,7 +101,38 @@ export default function TransactionTable({
                                 <TableCaption className="mb-4">No transaction yet ≧◔◡◔≦</TableCaption>
                             )}
                     </Table>
-                    <div className="flex justify-between items-center mt-4"></div>
+                    <div className="flex justify-between items-center mt-4">
+                        <div className="flex gap-2 items-center">
+                            <div className="text-sm text-muted-foreground"> Rows per page</div>
+                            <Select value={limit.toString()} onValueChange={(value) => {
+                                setLimit(Number(value))
+                                setPage(1)
+                            }}>
+                                <SelectTrigger className="w-20">
+                                    <SelectValue placeholder={limit.toString()} />
+                                </SelectTrigger>
+                                <SelectContent >
+                                    {[1, 10, 20, 50, 100].map((size) => (
+                                        <SelectItem key={`limit-${size}`} value={size.toString()}>
+                                            {size}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        </div>
+                        {transactions?.totalPages && transactions?.totalPages > 1 ? (
+                            <Pagination className="mx-0 w-auto">
+                                <PaginationContent>
+                                    <PaginationItem>
+                                        <PaginationPrevious onClick={() => page === 1 ? setPage(Number(transactions?.totalPages)) : setPage(page - 1)}/>
+                                    </PaginationItem>
+                                    <PaginationItem>
+                                        <PaginationNext onClick={() => page === Number(transactions?.totalPages) ? setPage(1) : setPage(page + 1)}/>
+                                    </PaginationItem>
+                                </PaginationContent>
+                            </Pagination>
+                        ) : (<div className="text-muted-foreground">This should been a pagination component here (●ω●)</div>)}
+                    </div>
                 </CardContent>
             </Card>
         </Fragment>
