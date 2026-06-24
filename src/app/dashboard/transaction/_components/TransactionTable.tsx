@@ -37,6 +37,7 @@ import { Input } from "@/components/ui/input";
 import { useEffect, useState } from "react";
 import { Transaction } from "@/app/types/transaction";
 import DeleteTransactionDialog from "./DeleteTransactionDialog";
+import UpdateTransactionDialog from "./UpdateTransactionDialog";
 
 const TABLE_HEADER = [
   "#",
@@ -83,7 +84,7 @@ export default function TransactionTable({
 
   const [selectedTransaction, setSelectedTransaction] = useState<{
     data: Omit<Transaction, "user_id" | "embedding">;
-    action: "edit" | "delete";
+    action: "update" | "delete";
   } | null>(null);
 
   return (
@@ -139,7 +140,12 @@ export default function TransactionTable({
                         variant="ghost"
                         size="icon"
                         className="text-muted-foreground hover:text-yellow-500"
-                        onClick={() => {}}
+                        onClick={() => {
+                          setSelectedTransaction({
+                            data: transaction,
+                            action: "update",
+                          });
+                        }}
                       >
                         <PencilIcon className="size-4" />
                       </Button>
@@ -227,6 +233,11 @@ export default function TransactionTable({
           </div>
         </CardContent>
       </Card>
+      <UpdateTransactionDialog
+        selectedTransaction={selectedTransaction}
+        setSelectedTransaction={setSelectedTransaction}
+        refetch={refetch}
+      />
       <DeleteTransactionDialog
         selectedTransaction={selectedTransaction}
         setSelectedTransaction={setSelectedTransaction}
