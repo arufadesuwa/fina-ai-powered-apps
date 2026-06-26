@@ -227,7 +227,7 @@ export default function TransactionTable({
               </Pagination>
             ) : (
               <div className="text-muted-foreground">
-                This should been a pagination component here (●ω●)
+                This should be a pagination component (●ω●)
               </div>
             )}
           </div>
