@@ -36,7 +36,7 @@ export default function ChatbotTextArea({
   }
 
   function handleKeyDown(e: KeyboardEvent<HTMLTextAreaElement>) {
-    if (isPending && e.key === "Enter" && !e.shiftKey) {
+    if (!isPending && e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       onSubmit(form.getValues());
     }
