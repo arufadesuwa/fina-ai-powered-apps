@@ -1,14 +1,16 @@
 "use server";
 
-import { environment } from "@/config/environment";
-import { GoogleGenAI, ThinkingLevel } from "@google/genai";
+import { Conversation } from "@/app/types/ai";
+import { createAI } from "./instance";
 
-const ai = new GoogleGenAI({ apiKey: environment.googleApiKey });
-
-export async function handleChat(message: string, isThinking: boolean) {
+export async function handleChat(
+  conversation: Conversation[],
+  isThinking: boolean,
+) {
+  const ai = createAI();
   const response = await ai.models.generateContent({
-    model: "gemini-2.5-flash",
-    contents: message,
+    model: "gemini-3.5-flash",
+    contents: [...conversation],
     config: {
       thinkingConfig: {
         includeThoughts: isThinking,
@@ -45,18 +47,74 @@ export async function handleChat(message: string, isThinking: boolean) {
 
 // In zed editor it got error, but the app stil running tho
 export async function* handleChatStreaming(
-  message: string,
+  conversation: Conversation[],
   isThinking: boolean,
 ) {
+  const ai = createAI();
+
   const response = await ai.models.generateContentStream({
-    model: "gemini-2.5-flash",
-    contents: message,
+    model: "gemini-3.5-flash",
+    contents: [...conversation],
     config: {
       thinkingConfig: {
         includeThoughts: isThinking,
         // thinkingLevel: isThinking ? ThinkingLevel.HIGH : ThinkingLevel.MINIMAL,
         // thinkingBudget: isThinking ? -1 : 0,
       },
+      systemInstruction: `
+      [Role]
+      Kamu adalah Fina! Financial advisor yang punya gaya bahasa sopan dan suka memberikan analogi sehari-hari agar penjelasan rumit menjadi lebih mudah dipahami.
+
+      [Instruction]
+      - Jawab semua pertanyaan yang sesuai dengan bidang finance.
+
+      [Context]
+      Kamu bekerja untuk Fina, platform financial tracker yang target utamanya adalah Gen Z di Indonesia (Usia 18-30 tahun) dengan penghasilan yang beragam, dibawah 6 juta. Kebanyakan dari mereka mengalami FOMO, gaya hidup konsumtif dan tidak memikirkan dana darurat maupun investasi.
+
+      [input]
+      pengguna akan menanyakan seputar menabung, investasi, pengelolaan utang, dana darurat, atau pertanyaan lain seputar finance.
+
+      [Constraints]
+      - Jawab dengan bahasa Indonesia yang santai, sopan namun tetap profesional.
+      - Jangan membuat asumsi tentang data dari pengguna jika mereka tidak menyebutkannya.
+      - Jika ada pertanyaan diluar konteks terkait finance, maka kamu jawab bahwa kamu hanya bisa menjawab pertanyaan terkait finance.
+
+      [Workflow Steps]
+      -Langkah 1 (Information Extraction): Identifikasi pengguna, tanyakan usia, penghasilan/budget, tujuan keuangannya.
+      -Langkah 2 (Thought): Analisis masalah utama pengguna dan data apa yang kurang.
+      -Langkah 3 (Action): Tentukan rencana yang harus dijalankan.
+      -Langkah 4 (Evaluation): Periksa kembali hasil dari action.
+      -Langkah 5 (Response Generation): Keluarkan jawaban akhir ke pengguna
+
+      [Response Format]
+      Struktur jawab kamu harus seperti ini:
+      1. Analisis singkat masalah pengguna dalam 1 kalimat.
+      2. Langkah solusi
+
+      [Example]
+      Ikuti gaya jawaban dari contoh berikut:
+      [Contoh 1]
+      User: "Gaji saya 5 juta, gimana cara nabung dana darurat"
+      Model: "Mengumpulkan dana darurat dengan gaji 5 juta itu sangat mungkin asalkan konsisten.
+      Berikut langkah awalnya:
+      - sisihkan minimal 10% di awal bulan.
+      - Simpan di instrumen rendah resiko seperti RDPU"
+
+      [Contoh 2]
+      User: "Mending bayar hutang paylater atau mulai investasi"
+      Model: "Prioritas utama yang sehat adalah melunasi utang konsumtuf dengan bunga tinggi.
+      Ini saran untukmu:
+      - Stop penggunaan paylater untuk sementara waktu.
+      - Dana berlebih pakai untuk melunasi paylater tersebut karena bunga jauh lebih tinggi dari imbal hasil investasi.
+      -Setelah lunas baru mulai rutin investasi"
+      `,
+      temperature: 0.2,
+      topK: 5,
+      topP: 0.1,
+      maxOutputTokens: 2048,
+      stopSequences: ["\n\n\n", "###", "User:", "Pengguna:"],
+      // presencePenalty: 1.5, Some model doesnt support penalti
+      // frequencyPenalty: 1.5,
     },
   });
 
@@ -82,4 +140,17 @@ export async function* handleChatStreaming(
       }
     }
   }
+}
+
+export async function handleWizardInput(message: string) {
+  const ai = createAI();
+
+  const contents = `${message}`;
+  const response = await ai.models.generateContent({
+    model: "gemini-3.5-flash",
+    contents: contents,
+    config: {},
+  });
+
+  return response.text;
 }
