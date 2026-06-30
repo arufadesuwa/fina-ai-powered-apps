@@ -3,14 +3,12 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Field } from "@/components/ui/field";
-import { Toggle } from "@/components/ui/toggle";
 import { handleWizardInput } from "@/features/ai/chat";
 import { createTransaction } from "@/features/transaction/action";
-import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
-import { BrainIcon, Loader2Icon, SendIcon, SparklesIcon } from "lucide-react";
-import { Dispatch, KeyboardEvent, SetStateAction } from "react";
+import { Loader2Icon, SendIcon, SparklesIcon } from "lucide-react";
+import { KeyboardEvent } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
