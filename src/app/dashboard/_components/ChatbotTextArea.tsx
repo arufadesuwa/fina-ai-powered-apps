@@ -1,5 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Toggle } from "@/components/ui/toggle";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -17,11 +24,15 @@ export default function ChatbotTextArea({
   isThinking,
   setIsThinking,
   isPending,
+  mode,
+  setMode,
 }: {
   sendMessage: (message: string) => void;
   isThinking: boolean;
   setIsThinking: Dispatch<SetStateAction<boolean>>;
   isPending: boolean;
+  mode: "general" | "personal";
+  setMode: Dispatch<SetStateAction<"general" | "personal">>;
 }) {
   const form = useForm<z.infer<typeof formScema>>({
     resolver: zodResolver(formScema),
@@ -64,7 +75,7 @@ export default function ChatbotTextArea({
         )}
       />
       <div className="flex items-center justify-between">
-        <div>
+        <div className="flex items-center gap-2 ">
           <Toggle
             // size="sm"
             variant="outline"
@@ -76,6 +87,18 @@ export default function ChatbotTextArea({
           >
             <BrainIcon size={4} />
           </Toggle>
+          <Select
+            value="mode"
+            onValueChange={(value: "general" | "personal") => setMode(value)}
+          >
+            <SelectTrigger size="sm" className="capitalize">
+              <SelectValue>{mode}</SelectValue>
+              <SelectContent>
+                <SelectItem value="general">General</SelectItem>
+                <SelectItem value="personal">Personal</SelectItem>
+              </SelectContent>
+            </SelectTrigger>
+          </Select>
         </div>
         <div>
           <Button

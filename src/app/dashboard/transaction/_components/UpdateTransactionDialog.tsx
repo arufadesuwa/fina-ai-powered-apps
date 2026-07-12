@@ -251,6 +251,7 @@ export default function UpdateTransactionDialog({
           <DialogFooter className="mt-4">
             <Button
               variant="ghost"
+              type="button"
               onClick={() => setSelectedTransaction(null)}
               disabled={isPending}
             >

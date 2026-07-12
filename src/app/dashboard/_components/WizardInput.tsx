@@ -3,8 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Field } from "@/components/ui/field";
-import { handleWizardInput } from "@/features/ai/chat";
-import { createTransaction } from "@/features/transaction/action";
+import { handleWizardInput, handleWizardTools } from "@/features/ai/wizard";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { Loader2Icon, SendIcon, SparklesIcon } from "lucide-react";
@@ -13,47 +12,40 @@ import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
 
-const formScema = z.object({
+const formSchema = z.object({
   message: z.string().min(1, "message is required"),
 });
 
 export default function WizardInput({ refetch }: { refetch: () => void }) {
-  const form = useForm<z.infer<typeof formScema>>({
-    resolver: zodResolver(formScema),
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
     defaultValues: {
       message: "",
     },
   });
 
   const { mutate, isPending } = useMutation({
-    mutationFn: async (message: string) => {
-      const aiResponse = await handleWizardInput(message);
-
-      if (!aiResponse) {
-        throw new Error("Failed to process AI input");
-      }
-
-      return createTransaction(aiResponse);
-    },
+    mutationFn: handleWizardTools,
     onSuccess: (response) => {
-      toast.success("Yatta! Transaction created successfully ʕ•ᴥ•ʔ");
       refetch();
-      form.reset;
+      form.reset();
+      toast.success(`Yatta! Transaction created successfully ʕ•ᴥ•ʔ`);
+      toast.success(`${response} ʕ•ᴥ•ʔ`);
     },
 
     onError: (error) => {
-      toast.error(error instanceof Error) ? error.message : "残念ですね";
+      toast.error(error instanceof Error ? error.message : "残念ですね");
     },
   });
 
-  function onSubmit(data: z.infer<typeof formScema>) {
+  function onSubmit(data: z.infer<typeof formSchema>) {
     mutate(data.message);
   }
 
   function handleKeyDown(e: KeyboardEvent<HTMLInputElement>) {
-    if (e.key === "Enter" && !e.shiftKey) {
+    if (!isPending && e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      onSubmit(form.getValues());
+      form.handleSubmit(onSubmit)();
     }
   }
 

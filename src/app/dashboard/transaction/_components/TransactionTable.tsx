@@ -122,7 +122,6 @@ export default function TransactionTable({
                       {new Date(transaction.date).toLocaleDateString()}
                     </TableCell>
                     <TableCell>{transaction.description}</TableCell>
-                    <TableCell>{transaction.description}</TableCell>
                     <TableCell>{transaction.category}</TableCell>
                     <TableCell
                       className={cn(
