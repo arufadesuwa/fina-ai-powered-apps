@@ -9,6 +9,7 @@ import { useMutation } from "@tanstack/react-query";
 import { Loader2Icon, SendIcon, SparklesIcon } from "lucide-react";
 import { KeyboardEvent } from "react";
 import { Controller, useForm } from "react-hook-form";
+import Markdown from "react-markdown";
 import { toast } from "sonner";
 import z from "zod";
 
@@ -29,8 +30,11 @@ export default function WizardInput({ refetch }: { refetch: () => void }) {
     onSuccess: (response) => {
       refetch();
       form.reset();
-      toast.success(`Yatta! Transaction created successfully ʕ•ᴥ•ʔ`);
-      toast.success(`${response} ʕ•ᴥ•ʔ`);
+      toast.success(
+        <div className="response-ai w-full!">
+          <Markdown>{response}</Markdown>
+        </div>,
+      );
     },
 
     onError: (error) => {
