@@ -6,7 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import QueryProvider from "@/queryClient";
 import { Toaster } from "@/components/ui/sonner";
 
-const outfit = Outfit({ subsets: ["latin"], variable: "--font-sans" });
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,7 +37,7 @@ export default function RootLayout({
         geistSans.variable,
         geistMono.variable,
         "font-sans",
-        outfit.variable,
+        geist.variable,
       )}
     >
       <body className="min-h-full flex flex-col">

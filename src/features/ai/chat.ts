@@ -53,6 +53,12 @@ async function generalChat(conversation: Content[], isThinking?: boolean) {
     model: "gemini-2.5-flash",
     contents: [...conversation],
     config: {
+      tools: [
+        {
+          googleSearch: {},
+          urlContext: {},
+        },
+      ],
       thinkingConfig: {
         includeThoughts: isThinking,
       },
@@ -191,10 +197,19 @@ export async function* handleChatStreaming(
 
     while (running) {
       const response = await ai.models.generateContentStream({
-        model: "gemini-2.5-flash",
+        model: "gemini-3.5-flash",
         contents,
         config: {
-          tools: [{ functionDeclarations: [getTransactionDeclaration] }],
+          tools: [
+            {
+              // googleSearch: {}, Because we are on free plan we cant use ts
+              // urlContext: {},
+              functionDeclarations: [getTransactionDeclaration],
+            },
+          ],
+          // toolConfig: {
+          // includeServerSideToolInvocations: true,
+          // },
           thinkingConfig: {
             includeThoughts: isThinking,
           },
