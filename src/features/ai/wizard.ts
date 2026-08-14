@@ -65,33 +65,59 @@ export async function handleWizardInput(message: string) {
   return transaction;
 }
 
-export async function handleWizardTools(message: string) {
-  const contents: Content[] = [
-    {
-      role: "user",
-      parts: [
-        {
-          text: `
-          <role>
-            You are an AI Wizard finance assitant, who can extract transaction details from text.
-          </role>
-          <instruction>
-            Extract the transaction details from the following text.
-            - If request is to update or delete data. you must call function get_transaction first which transaction will be updated or deleted.
-            - When update transaction, args must return from get_transaction before with fully like in schema.
-            - The final response if there are no more functions being called is as simple as possible.
-          </instruction>
-          <context>
-            Current Date : ${new Date().toISOString()}
-          </context>
-          <input>
-            Text to extract: ${message}
-          </input>
-          `,
-        },
-      ],
-    },
-  ];
+export async function handleWizardTools(formData: FormData) {
+  const file = formData.get("file") as File;
+  const type = formData.get("type") as "audio" | "text";
+  const request = formData.get("request") as String;
+  if (type === "audio" && !file) {
+    throw new Error("No file uploaded");
+  }
+  let mimeType = "";
+  let base64Data = "";
+
+  if (type === "audio") {
+    ((mimeType = file.type),
+      (base64Data = Buffer.from(await file.arrayBuffer()).toString("base64")));
+  }
+  let contents: Content[] = [];
+
+  contents.push({
+    role: "user",
+    parts: [
+      ...(type === "audio"
+        ? [
+            {
+              inlineData: {
+                mimeType,
+                data: base64Data,
+              },
+            },
+          ]
+        : []),
+      {
+        text: `
+        <role>
+          You are an AI Wizard finance assitant, who can extract transaction details from ${type}.
+        </role>
+        <instruction>
+          Extract the transaction details from ${type === "text" ? "the following text" : "the audio file"} in bahasa Indonesia.
+          - If request is to update or delete data. you must call function get_transaction first which transaction will be updated or deleted.
+          - When update transaction, args must return from get_transaction before with fully like in schema.
+          - The final response if there are no more functions being called is as simple as possible.
+        </instruction>
+        <context>
+          Current Date : ${new Date().toISOString()}
+        </context>
+        ${
+          type === "text" &&
+          `<input>
+            Text to extract: ${request}
+          </input>`
+        }
+        `,
+      },
+    ],
+  });
 
   const ai = createAI();
   let running = true;
