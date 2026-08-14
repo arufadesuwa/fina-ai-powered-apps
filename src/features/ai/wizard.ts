@@ -15,24 +15,7 @@ import {
   getTransactionDeclaration,
   updateTransactionDeclaration,
 } from "./functionTransaction";
-
-const transactionSchema = z.object({
-  amount: z.number().default(0).describe("Transaction nominal"),
-  type: z.enum(["income", "expense"]).describe("Type of Transaction"),
-  category: z
-    .enum([
-      "Food & Drink",
-      "Shopping",
-      "Housing",
-      "Transportation",
-      "Entertainment",
-      "Salary",
-      "Others",
-    ])
-    .describe("category of transaction"),
-  description: z.string().describe("short text for describing transaction"),
-  date: z.string().describe("date of transaction in YYYY-MM-DD format"),
-});
+import { transactionSchema } from "@/constants/transactionConstant";
 
 export async function handleWizardInput(message: string) {
   const ai = createAI();

@@ -32,6 +32,7 @@ import { toast } from "sonner";
 import z from "zod";
 import { format } from "date-fns";
 import { Textarea } from "@/components/ui/textarea";
+import { CATEGORIES } from "@/constants/transactionConstant";
 
 const formSchema = z.object({
   amount: z.string().min(1, "Amount is required"),
@@ -186,19 +187,11 @@ export default function UpdateTransactionDialog({
                         <SelectValue placeholder="Select category ´･ᴗ･`" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="Food & Drink">
-                          Food & Drink
-                        </SelectItem>
-                        <SelectItem value="Transportation">
-                          Transportation
-                        </SelectItem>
-                        <SelectItem value="Entertainment">
-                          Entertainment
-                        </SelectItem>
-                        <SelectItem value="Shopping">Shopping</SelectItem>
-                        <SelectItem value="Housing">Housing</SelectItem>
-                        <SelectItem value="Salary">Salary</SelectItem>
-                        <SelectItem value="Other">Other</SelectItem>
+                        {CATEGORIES.map((category) => (
+                          <SelectItem value={category} key={category}>
+                            {category}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                     {fieldState.invalid && (
