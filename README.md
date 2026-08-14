@@ -1,36 +1,78 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Halo, ini fina-app (´｡• ᵕ •｡`) ♡
+> **Project belajar AI Apps Development.** *"Dibangun sambil ngikutin course, isinya campur aduk dari Content Generation sampai AI Agent."* ┐(︶▽︶)┌
 
-## Getting Started
+Project ini dibuat berdasarkan tutorial **[AI Apps — WPU Course](https://wpucourse.id/course/ai-apps)** (o^▽^o)
 
-First, run the development server:
+### ─── ･ ｡ﾟ☆: *.☽ .* :☆ﾟ. ───
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+### apa aja yang dipelajari di sini
+* **Content Generation:** Bikin AI menghasilkan teks/konten otomatis. `(つ✧ω✧)つ`
+* **Prompt Engineering:** Ngoprek prompt sampai hasilnya sesuai ekspektasi. `(＃＞＜)`
+* **RAG (Retrieval-Augmented Generation):** Gabungin pencarian data sama jawaban AI. `(o_ _)o`
+* **AI Agent:** Bikin agent yang bisa ambil keputusan & jalanin aksi sendiri. `(ง 🛠️_🛠️)ง`
+
+### catatan penting (｡•́︿•̀｡)
+```text
+Cuma jalan pakai Gemini API  :: @google/genai              (；^ω^)
+Image & Video Generation     :: butuh paid tier Gemini      (＃`Д´)
+```
+Project ini dibangun pakai `@google/genai`, jadi **hanya kompatibel dengan Gemini API** (bukan OpenAI, Claude, dsb). Fitur **Image Generation** dan **Video Generation** butuh **API berbayar**, pastikan billing di Google AI Studio / Google Cloud udah aktif dulu.
+
+### tools & environment
+```text
+Framework  :: Next.js 16 (React 19)          (✧ω✧)
+AI SDK     :: @google/genai (Gemini API)     (o^▽^o)
+Database   :: Supabase                       (｀_´)ゞ
+Fetching   :: TanStack Query                 (＠_＠)
+Form       :: React Hook Form + Zod          (ノ°∀°)ノ
+UI         :: Radix UI, shadcn, Tailwind 4   (⌐■_■)
+Chart      :: Recharts                       (✧ω✧)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### getting started 🍳
+**1. Clone repository**
+```bash
+git clone https://github.com/arufadesuwa/fina-ai-powered-apps.git
+cd fina-app
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+**2. Install dependencies**
+```bash
+bun i
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+**3. Siapin environment variables**
 
-## Learn More
+Buat file `.env.local` di root project/copy dari .env.example:
+```bash
+GEMINI_API_KEY=your_gemini_api_key
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
+> Sesuaikan nama variable sama yang dipakai di kode project kamu ya `(o_ _)o`
 
-To learn more about Next.js, take a look at the following resources:
+**4. Jalanin file migration**
+ 
+Sebelum nyalain server, jalanin dulu file migration di folder `/migrations` di supabase satu-satu ya, jangan diskip `(＃＞＜)`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+> Urutannya penting! Jalanin dari nomor paling kecil ke paling besar biar database-nya gak berantakan `(o_ _)o`
+ 
+**5. Jalanin development server**
+```bash
+bun dev
+```
+Buka [http://localhost:3000](http://localhost:3000) di browser (づ｡◕‿‿◕｡)づ
+ 
+### available scripts
+- [x] `bun dev` — jalanin development server `(✧ω✧)`
+- [x] `bun run build` — build project buat production `(๑˃̵ᴗ˂̵)و`
+- [x] `bun run start` — jalanin production server `(≧∇≦)ﾉ`
+### sumber belajar
+* **Course:** [AI Apps — WPU Course](https://wpucourse.id/course/ai-apps) `(⌐■_■)`
+* **Docs** [Gemini API Docs](https://ai.google.dev/gemini-api/docs) `(。U⁄ ⁄ω⁄ ⁄ U。)`
+### license
+Project ini pakai lisensi **GNU General Public License v3.0 (GPLv3)**.
+Lihat file [LICENSE](./LICENSE) buat detail lengkapnya `(￣^￣)ゞ`
+ 
+---
+Dibuat sambil belajar, sambil ngoprek, sambil ngopi ( •̀ ω •́ )✧
