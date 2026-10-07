@@ -56,7 +56,7 @@ export default function ChatbotTextArea({
   return (
     <form
       onSubmit={form.handleSubmit(onSubmit)}
-      className="flex flex-col p-2 bg-secondary rounded-2xl"
+      className="flex flex-col p-2.5 bg-secondary/80 border border-border/70 rounded-[20px]"
     >
       <Controller
         control={form.control}
@@ -68,30 +68,29 @@ export default function ChatbotTextArea({
               id="form-message"
               placeholder="ask fina advisor!"
               autoComplete="off"
-              className="h-16 resize-none rounded-md px-3 py-2 focus:outline-none"
+              className="h-16 resize-none bg-transparent px-2 py-1 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
               onKeyDown={handleKeyDown}
             />
           </Field>
         )}
       />
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2 ">
+      <div className="flex items-center justify-between pt-1">
+        <div className="flex items-center gap-2">
           <Toggle
-            // size="sm"
             variant="outline"
             pressed={isThinking}
             onPressedChange={setIsThinking}
-            className={cn("text-xs p-0 h-8 w-8", {
-              "bg-primary! text-primary-foreground!": isThinking,
+            className={cn("text-xs p-0 size-8 rounded-full border-border bg-card", {
+              "bg-primary! text-primary-foreground! border-primary!": isThinking,
             })}
           >
-            <BrainIcon size={4} />
+            <BrainIcon className="size-4" />
           </Toggle>
           <Select
-            value="mode"
+            value={mode}
             onValueChange={(value: "general" | "personal") => setMode(value)}
           >
-            <SelectTrigger size="sm" className="capitalize">
+            <SelectTrigger size="sm" className="capitalize rounded-full h-8 px-3 text-xs bg-card border-border">
               <SelectValue>{mode}</SelectValue>
               <SelectContent>
                 <SelectItem value="general">General</SelectItem>
@@ -103,12 +102,12 @@ export default function ChatbotTextArea({
         <div>
           <Button
             type="submit"
-            size="icon"
-            variant="ghost"
-            className="text-primary hover:bg-primary/10 hover:text-primary cursor-pointer disabled:bg-transparent"
+            size="icon-sm"
+            variant="default"
+            className="rounded-full size-8 p-0 cursor-pointer disabled:opacity-40"
             disabled={isPending}
           >
-            <SendIcon className="size-5" />
+            <SendIcon className="size-3.5" />
           </Button>
         </div>
       </div>

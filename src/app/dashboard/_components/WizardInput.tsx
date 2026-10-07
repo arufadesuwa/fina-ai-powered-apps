@@ -18,6 +18,7 @@ import { Controller, useForm } from "react-hook-form";
 import Markdown from "react-markdown";
 import { toast } from "sonner";
 import z from "zod";
+import { cn } from "@/lib/utils";
 
 const formSchema = z.object({
   message: z.string().min(1, "message is required"),
@@ -104,63 +105,64 @@ export default function WizardInput({ refetch }: { refetch: () => void }) {
 
   const isText = form.watch("message") !== "";
   return (
-    <Card className="w-full border-primary/20 p-0">
-      <CardContent>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="flex items-center gap-2"
+    <div className="w-full rounded-[24px] bg-card p-2 sm:p-3 ring-1 ring-black/[0.04] dark:ring-white/10 shadow-none transition-all">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex items-center gap-3 px-2"
+      >
+        <div className="size-11 rounded-full bg-primary text-primary-foreground flex items-center justify-center shrink-0">
+          <SparklesIcon className="size-5" />
+        </div>
+        <Controller
+          control={form.control}
+          name="message"
+          render={({ field }) => (
+            <div className="flex-1">
+              <input
+                {...field}
+                id="form-message"
+                placeholder={
+                  isRecording
+                    ? "Listening... speak now"
+                    : isPending && !field.value
+                      ? "AI is recording transaction..."
+                      : "Type or speak: 'Spent 50k on lunch at bakery'..."
+                }
+                autoComplete="off"
+                className="w-full h-12 bg-transparent text-sm sm:text-base text-foreground placeholder:text-muted-foreground focus:outline-none"
+                onKeyDown={handleKeyDown}
+              />
+            </div>
+          )}
+        />
+        <Button
+          type={isText ? "submit" : "button"}
+          size="icon"
+          variant={isText ? "default" : "secondary"}
+          className={cn(
+            "size-11 rounded-full transition-transform active:scale-95 shrink-0",
+            isRecording && "bg-destructive text-white hover:bg-destructive"
+          )}
+          disabled={isPending}
+          onClick={
+            !isText
+              ? isRecording
+                ? stopRecording
+                : startRecording
+              : undefined
+          }
         >
-          <div className="text-primary">
-            <SparklesIcon className="size-5" />
-          </div>
-          <Controller
-            control={form.control}
-            name="message"
-            render={({ field }) => (
-              <Field>
-                <input
-                  {...field}
-                  id="form-message"
-                  placeholder={
-                    isRecording
-                      ? "Listening..."
-                      : isPending && !field.value
-                        ? "Processing your request..."
-                        : "Manage your transaction here"
-                  }
-                  autoComplete="off"
-                  className="h-14 focus:outline-none"
-                  onKeyDown={handleKeyDown}
-                  // disabled={isPending}
-                />
-              </Field>
-            )}
-          />
-          <Button
-            type={isText ? "submit" : "button"}
-            size="icon"
-            variant="ghost"
-            disabled={isPending}
-            onClick={
-              !isText
-                ? isRecording
-                  ? stopRecording
-                  : startRecording
-                : undefined
-            }
-          >
-            {isPending ? (
-              <Loader2Icon className="size-5 animate-spin" />
-            ) : isText ? (
-              <SendIcon className="size-5" />
-            ) : isRecording ? (
-              <SquareIcon className="size-5 fill-red-500 text-red-500 animate-pulse" />
-            ) : (
-              <MicIcon className="size-5 " />
-            )}
-          </Button>
-        </form>
-      </CardContent>
-    </Card>
+          {isPending ? (
+            <Loader2Icon className="size-5 animate-spin" />
+          ) : isText ? (
+            <SendIcon className="size-5" />
+          ) : isRecording ? (
+            <SquareIcon className="size-5 fill-white text-white animate-pulse" />
+          ) : (
+            <MicIcon className="size-5" />
+          )}
+        </Button>
+      </form>
+    </div>
   );
 }

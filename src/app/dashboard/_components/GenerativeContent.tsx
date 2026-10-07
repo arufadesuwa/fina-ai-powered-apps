@@ -42,13 +42,13 @@ const formSchema = z.object({
 });
 
 const COLORS = [
-  "#10b981",
-  "#f43f5e",
-  "#3b82f6",
-  "#f59e0b",
-  "#8b5cf6",
-  "#06b6d4",
-  "64748b",
+  "#9fe870",
+  "#2ead4b",
+  "#38c8ff",
+  "#ffc091",
+  "#ffd11a",
+  "#0e0f0c",
+  "#d03238",
 ];
 
 export default function GenerativeContent() {
@@ -127,41 +127,49 @@ export default function GenerativeContent() {
   }
 
   return (
-    <Card className="relative w-full overflow-hidden">
+    <Card className="w-full">
       <CardHeader>
         <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-center">
-          <CardTitle className="flex items-center gap-2 text-xl">
-            <SparklesIcon className="size-5 text-primary" />
-            Generative AI Insight
+          <CardTitle className="flex items-center gap-3 text-xl lg:text-2xl font-black text-foreground tracking-tight">
+            <div className="size-9 rounded-full bg-primary flex items-center justify-center text-primary-foreground shadow-xs shrink-0">
+              <SparklesIcon className="size-4.5" />
+            </div>
+            <span>Generative AI Insights</span>
           </CardTitle>
           <form
-            className="flex flex-col gap-2 lg:flex-row lg:items-center"
+            className="flex flex-col gap-2.5 sm:flex-row sm:items-center"
             onSubmit={form.handleSubmit(onSubmit)}
           >
-            <ButtonGroup>
+            <ButtonGroup className="rounded-full bg-secondary p-1">
               <Button
-                variant={insightType === "chart" ? "default" : "secondary"}
+                variant={insightType === "chart" ? "default" : "ghost"}
                 type="button"
-                size="icon"
+                size="sm"
+                className="rounded-full h-8 px-3 text-xs"
                 onClick={() => setInsightType("chart")}
               >
-                <ChartPieIcon />
+                <ChartPieIcon className="size-3.5" />
+                <span>Chart</span>
               </Button>
               <Button
-                variant={insightType === "image" ? "default" : "secondary"}
+                variant={insightType === "image" ? "default" : "ghost"}
                 type="button"
-                size="icon"
+                size="sm"
+                className="rounded-full h-8 px-3 text-xs"
                 onClick={() => setInsightType("image")}
               >
-                <ImageIcon />
+                <ImageIcon className="size-3.5" />
+                <span>Image</span>
               </Button>
               <Button
-                variant={insightType === "video" ? "default" : "secondary"}
+                variant={insightType === "video" ? "default" : "ghost"}
                 type="button"
-                size="icon"
+                size="sm"
+                className="rounded-full h-8 px-3 text-xs"
                 onClick={() => setInsightType("video")}
               >
-                <VideoIcon />
+                <VideoIcon className="size-3.5" />
+                <span>Video</span>
               </Button>
             </ButtonGroup>
             <div className="flex flex-row gap-2">
@@ -173,21 +181,21 @@ export default function GenerativeContent() {
                     <Input
                       {...field}
                       id="form-request"
-                      placeholder="Insert your request..."
-                      className="w-50 lg:w-70"
+                      placeholder="E.g. category spending breakdown..."
+                      className="w-48 sm:w-64"
                       onKeyDown={handleKeyDown}
                       disabled={isPending}
                     />
                   </Field>
                 )}
               />
-              <Button type="submit" disabled={isPending}>
+              <Button type="submit" disabled={isPending} className="rounded-full shrink-0">
                 {isPending ? (
                   <Loader2Icon className="size-4 animate-spin" />
                 ) : (
                   <Sparkles className="size-4" />
                 )}
-                <span className="hidden lg:inline">
+                <span>
                   {result ? "Update" : "Generate"}
                 </span>
               </Button>
@@ -195,24 +203,32 @@ export default function GenerativeContent() {
           </form>
         </div>
       </CardHeader>
-      <CardContent className={cn(result?.type === "chart" && "h-70")}>
+      <CardContent className={cn(result?.type === "chart" && "h-72")}>
         {error && (
-          <div className="p-4 text-sm border rounded-lg text-destructive border-destructive/50 bg-destructive/10">
+          <div className="p-4 text-sm rounded-xl text-destructive border border-destructive/20 bg-destructive/10">
             {error.message}
           </div>
         )}
 
         {!result ? (
-          <div className="flex items-center justify-center border-2 border-dashed rounded-lg h-70">
+          <div className="flex items-center justify-center rounded-[20px] border border-dashed border-border/80 bg-secondary/30 h-64">
             {isPending ? (
-              <div className="flex flex-col items-center">
-                <Loader2Icon className="size-8 animate-spin" />
-                <span>AI is generating insight</span>
+              <div className="flex flex-col items-center gap-3">
+                <Loader2Icon className="size-8 text-primary animate-spin" />
+                <span className="text-sm font-semibold text-foreground">AI is generating insight...</span>
               </div>
             ) : (
-              <span className="text-lg text-muted-foreground/50">
-                Generate insight content with AI
-              </span>
+              <div className="flex flex-col items-center text-center p-6 gap-2">
+                <div className="size-10 rounded-full bg-secondary flex items-center justify-center text-muted-foreground">
+                  <ChartPieIcon className="size-5" />
+                </div>
+                <span className="text-sm font-semibold text-foreground">
+                  Generate instant visual analytics
+                </span>
+                <span className="text-xs text-muted-foreground max-w-sm">
+                  Ask for spending breakdowns, category proportions, or trend visualizations
+                </span>
+              </div>
             )}
           </div>
         ) : (

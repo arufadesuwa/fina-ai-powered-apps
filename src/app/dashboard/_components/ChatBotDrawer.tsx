@@ -126,57 +126,55 @@ export default function ChatBotDrawer() {
 
   return (
     <Drawer direction="right" modal={false}>
-      <DrawerTrigger className="fixed bottom-4 right-4" asChild>
+      <DrawerTrigger className="fixed bottom-6 right-6" asChild>
         <Button
-          className="rounded-full size-14"
-          variant="outline"
-          // onClick={async () => {
-          // const result = await handleChat("dummy");
-          // console.log(result);
-          // }}
+          className="rounded-full size-14 bg-primary text-primary-foreground hover:bg-[#cdffad] shadow-lg border-0 cursor-pointer"
+          size="icon-lg"
         >
           <BotIcon className="size-6" />
         </Button>
       </DrawerTrigger>
       <DrawerContent className="w-screen! md:w-110!">
-        <DrawerHeader className="flex flex-row justify-between">
+        <DrawerHeader className="flex flex-row justify-between items-center border-b border-border/40 pb-3">
           <div>
-            <DrawerTitle className="text-primary font-bold">
+            <DrawerTitle className="text-foreground font-black text-lg tracking-tight">
               AI Financial Advisor \(‾▿‾\)
             </DrawerTitle>
-            <DrawerDescription>
+            <DrawerDescription className="text-muted-foreground text-xs mt-0.5">
               Get personalized financial advice (/‾▿‾)/
             </DrawerDescription>
           </div>
           <DrawerClose asChild>
-            <Button variant="outline" size="icon">
-              <XIcon />
+            <Button variant="ghost" size="icon-sm" className="rounded-full">
+              <XIcon className="size-4" />
             </Button>
           </DrawerClose>
         </DrawerHeader>
-        <div className="no-scrollbar overflow-y-auto ph-4 h-full">
+        <div className="no-scrollbar overflow-y-auto ph-4 h-full p-4">
           {conversation.length > 0 ? (
             <div
               ref={chatRef}
-              className="flex flex-col h-full overflow-x-hidden no-scrollbar overflow-y-auto gap-8"
+              className="flex flex-col h-full overflow-x-hidden no-scrollbar overflow-y-auto gap-6"
             >
               {conversation.map((message, index) => (
                 <div
                   key={`conversation-${index}`}
                   className={cn(
-                    "flex flex-col gap-2",
+                    "flex flex-col gap-1.5",
                     message.role === "model" ? "items-start" : "items-end",
                   )}
                 >
                   <div
-                    className={cn("flex flex-col w-full", {
-                      "bg-primary/20 text-primary px-5 py-2 rounded-3xl rounded-br-md w-fit max-w-3/4":
+                    className={cn("flex flex-col", {
+                      "bg-primary-pale text-ink px-4 py-2.5 rounded-[20px] rounded-br-xs w-fit max-w-[85%] font-medium text-sm":
                         message.role === "user",
+                      "bg-secondary/70 text-ink px-4 py-3 rounded-[20px] rounded-bl-xs w-full text-sm":
+                        message.role === "model",
                     })}
                   >
                     {message.role === "model" && (
-                      <div className="flex items-center text-xs gap-1 text-primary font-semibold">
-                        <BotIcon />
+                      <div className="flex items-center text-xs gap-1.5 text-positive-deep font-bold mb-1">
+                        <BotIcon className="size-3.5" />
                         Fina Advisor
                       </div>
                     )}

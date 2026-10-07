@@ -82,28 +82,31 @@ export default function CreateTransactionCard({
   };
 
   return (
-    <Card className="w-full gap-2 h-fit">
-      <CardHeader className="gap-0">
-        <CardTitle>Create Transaction（＾ω＾）</CardTitle>
-        <CardDescription>
+    <Card className="w-full h-fit">
+      <CardHeader>
+        <CardTitle className="text-xl lg:text-2xl font-black text-foreground tracking-tight">
+          Create Transaction（＾ω＾）
+        </CardTitle>
+        <CardDescription className="text-body text-sm mt-0.5">
           Add a new financial activity desuwa（＾ω＾）
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="mb-4">
+        <div className="mb-5">
           <FileDropZoneInput
             setValues={form.setValues}
-            // refetch={refetch}
           />
         </div>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <FieldGroup className="gap-3">
+          <FieldGroup className="gap-4">
             <Controller
               control={form.control}
               name="amount"
               render={({ field, fieldState }) => (
-                <Field className="gap-1">
-                  <FieldLabel htmlFor="form-amount">Amount</FieldLabel>
+                <Field className="gap-1.5">
+                  <FieldLabel htmlFor="form-amount" className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                    Amount
+                  </FieldLabel>
                   <Input
                     {...field}
                     id="form-amount"
@@ -122,10 +125,12 @@ export default function CreateTransactionCard({
               control={form.control}
               name="type"
               render={({ field, fieldState }) => (
-                <Field className="gap-1">
-                  <FieldLabel htmlFor="form-type">Type</FieldLabel>
+                <Field className="gap-1.5">
+                  <FieldLabel htmlFor="form-type" className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                    Type
+                  </FieldLabel>
                   <Select onValueChange={field.onChange} value={field.value}>
-                    <SelectTrigger id="form-type">
+                    <SelectTrigger id="form-type" className="rounded-xl h-11">
                       <SelectValue placeholder="Select type ´･ᴗ･`" />
                     </SelectTrigger>
                     <SelectContent>
@@ -143,10 +148,12 @@ export default function CreateTransactionCard({
               control={form.control}
               name="category"
               render={({ field, fieldState }) => (
-                <Field className="gap-1">
-                  <FieldLabel htmlFor="form-category">Category</FieldLabel>
+                <Field className="gap-1.5">
+                  <FieldLabel htmlFor="form-category" className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                    Category
+                  </FieldLabel>
                   <Select onValueChange={field.onChange} value={field.value}>
-                    <SelectTrigger id="form-category">
+                    <SelectTrigger id="form-category" className="rounded-xl h-11">
                       <SelectValue placeholder="Select category ´･ᴗ･`" />
                     </SelectTrigger>
                     <SelectContent>
@@ -167,8 +174,10 @@ export default function CreateTransactionCard({
               control={form.control}
               name="date"
               render={({ field, fieldState }) => (
-                <Field className="gap-1">
-                  <FieldLabel htmlFor="form-date">Date</FieldLabel>
+                <Field className="gap-1.5">
+                  <FieldLabel htmlFor="form-date" className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                    Date
+                  </FieldLabel>
                   <DatePicker
                     id="form-date"
                     value={field.value ? new Date(field.value) : undefined}
@@ -186,8 +195,8 @@ export default function CreateTransactionCard({
               control={form.control}
               name="description"
               render={({ field, fieldState }) => (
-                <Field className="gap-1">
-                  <FieldLabel htmlFor="form-description">
+                <Field className="gap-1.5">
+                  <FieldLabel htmlFor="form-description" className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
                     Description
                   </FieldLabel>
                   <Textarea
@@ -202,7 +211,7 @@ export default function CreateTransactionCard({
                 </Field>
               )}
             />
-            <Button size="lg" type="submit" disabled={isPending}>
+            <Button size="lg" type="submit" disabled={isPending} className="w-full h-12 rounded-full font-bold text-base mt-2">
               {isPending ? "Gaman shite nee~" : "Create!!   (◔◡◔)"}
             </Button>
           </FieldGroup>

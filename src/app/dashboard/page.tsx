@@ -9,12 +9,13 @@ export const metadata: Metadata = {
 
 export default function DashboardPage() {
   return (
-    <div className="space-y-4">
-      <section id="header">
-        <h1 className="text-4xl font-bold text-primary">Dashboard</h1>
-        <p>
-          Get insights into your spending, track your expenses, and manage your
-          finances.
+    <div className="space-y-6">
+      <section id="header" className="space-y-1">
+        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-foreground tracking-tight">
+          Dashboard
+        </h1>
+        <p className="text-body text-base lg:text-lg">
+          Get insights into your spending, track your expenses, and command your finances with AI.
         </p>
       </section>
       <DashboardContent />

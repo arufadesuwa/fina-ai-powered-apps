@@ -89,99 +89,108 @@ export default function TransactionTable({
 
   return (
     <Fragment>
-      <Card className="gap-2 w-full">
-        <CardHeader className="flex flex-col gap-2 justify-between md:flex-row md:items-center">
+      <Card className="w-full">
+        <CardHeader className="flex flex-col gap-3 justify-between sm:flex-row sm:items-center">
           <div>
-            <CardTitle>Recent Transaction</CardTitle>
-            <CardDescription>Your latest financial activities</CardDescription>
+            <CardTitle className="text-xl lg:text-2xl font-black text-foreground tracking-tight">Recent Transactions</CardTitle>
+            <CardDescription className="text-body text-sm mt-0.5">Your recorded financial activities</CardDescription>
           </div>
-          <div>
+          <div className="w-full sm:w-64">
             <Input
               placeholder="Search desuwa!  (・o･)♪"
               value={localSearch}
               onChange={(e) => setLocalSearch(e.target.value)}
-              className="w-full"
+              className="w-full h-10"
             />
           </div>
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                {TABLE_HEADER.map((header) => (
-                  <TableHead key={`th-${header}`}>{header}</TableHead>
-                ))}
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {!isLoading &&
-                transactions?.data?.map((transaction, index) => (
-                  <TableRow key={`tr-${transaction.id}`}>
-                    <TableCell>{(page - 1) * limit + index + 1}</TableCell>
-                    <TableCell className="font-medium">
-                      {new Date(transaction.date).toLocaleDateString()}
-                    </TableCell>
-                    <TableCell>{transaction.description}</TableCell>
-                    <TableCell>{transaction.category}</TableCell>
-                    <TableCell
-                      className={cn(
-                        "font-semibold",
-                        transaction.type === "expense"
-                          ? "text-destructive"
-                          : "text-green-500",
-                      )}
-                    >
-                      {transaction.type === "expense" && "-"}
-                      {convertToIDR(transaction.amount)}
-                    </TableCell>
-                    <TableCell className="flex">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="text-muted-foreground hover:text-yellow-500"
-                        onClick={() => {
-                          setSelectedTransaction({
-                            data: transaction,
-                            action: "update",
-                          });
-                        }}
-                      >
-                        <PencilIcon className="size-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="text-muted-foreground hover:text-destructive"
-                        onClick={() => {
-                          setSelectedTransaction({
-                            data: transaction,
-                            action: "delete",
-                          });
-                        }}
-                      >
-                        <Trash2Icon className="size-4" />
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
-            </TableBody>
-            {isLoading && (
-              <TableCaption className="mb-4">
-                Loading desuwa (っ◔◡◔)っ ♥...
-              </TableCaption>
-            )}
-            {!isLoading && transactions?.data?.length === 0 && (
-              <TableCaption className="mb-4">
-                No transaction yet ≧◔◡◔≦
-              </TableCaption>
-            )}
-          </Table>
-          <div className="flex justify-between items-center mt-4">
+          <div className="rounded-[16px] overflow-hidden border border-border/50">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  {TABLE_HEADER.map((header) => (
+                    <TableHead key={`th-${header}`}>{header}</TableHead>
+                  ))}
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {!isLoading &&
+                  transactions?.data?.map((transaction, index) => (
+                    <TableRow key={`tr-${transaction.id}`}>
+                      <TableCell className="text-muted-foreground font-mono text-xs">{(page - 1) * limit + index + 1}</TableCell>
+                      <TableCell className="font-medium text-foreground">
+                        {new Date(transaction.date).toLocaleDateString()}
+                      </TableCell>
+                      <TableCell className="font-semibold text-foreground">{transaction.description}</TableCell>
+                      <TableCell>
+                        <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-secondary text-foreground">
+                          {transaction.category}
+                        </span>
+                      </TableCell>
+                      <TableCell>
+                        <span
+                          className={cn(
+                            "font-bold text-sm",
+                            transaction.type === "expense"
+                              ? "text-destructive"
+                              : "text-positive-deep bg-primary-pale px-2.5 py-0.5 rounded-full",
+                          )}
+                        >
+                          {transaction.type === "expense" ? "-" : "+"}
+                          {convertToIDR(transaction.amount)}
+                        </span>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-1">
+                          <Button
+                            variant="ghost"
+                            size="icon-xs"
+                            className="size-8 rounded-full text-muted-foreground hover:text-foreground hover:bg-secondary"
+                            onClick={() => {
+                              setSelectedTransaction({
+                                data: transaction,
+                                action: "update",
+                              });
+                            }}
+                          >
+                            <PencilIcon className="size-3.5" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon-xs"
+                            className="size-8 rounded-full text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                            onClick={() => {
+                              setSelectedTransaction({
+                                data: transaction,
+                                action: "delete",
+                              });
+                            }}
+                          >
+                            <Trash2Icon className="size-3.5" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+              </TableBody>
+              {isLoading && (
+                <TableCaption className="py-8 text-muted-foreground">
+                  Loading desuwa (っ◔◡◔)っ ♥...
+                </TableCaption>
+              )}
+              {!isLoading && transactions?.data?.length === 0 && (
+                <TableCaption className="py-8 text-muted-foreground">
+                  No transaction yet ≧◔◡◔≦
+                </TableCaption>
+              )}
+            </Table>
+          </div>
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-4 pt-2">
             <div className="flex gap-2 items-center">
-              <div className="text-sm text-muted-foreground">
-                {" "}
+              <span className="text-xs font-medium text-muted-foreground">
                 Rows per page
-              </div>
+              </span>
               <Select
                 value={limit.toString()}
                 onValueChange={(value) => {
@@ -189,7 +198,7 @@ export default function TransactionTable({
                   setPage(1);
                 }}
               >
-                <SelectTrigger className="w-20">
+                <SelectTrigger className="w-20 h-9 rounded-xl">
                   <SelectValue placeholder={limit.toString()} />
                 </SelectTrigger>
                 <SelectContent>
@@ -225,7 +234,7 @@ export default function TransactionTable({
                 </PaginationContent>
               </Pagination>
             ) : (
-              <div className="text-muted-foreground">
+              <div className="text-muted-foreground text-xs">
                 This should be a pagination component (●ω●)
               </div>
             )}
